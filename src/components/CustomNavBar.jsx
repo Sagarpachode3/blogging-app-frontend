@@ -48,7 +48,7 @@ const CustomNavBar = () => {
               <DropdownToggle nav caret>
                 More
               </DropdownToggle>
-              <DropdownMenu right>
+              <DropdownMenu end>
                 <DropdownItem tag={ReactLink} to="/services">
                   Services
                 </DropdownItem>
