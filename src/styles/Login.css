@@ -1,0 +1,9 @@
+.register-link {
+  text-decoration: none; /* Remove underline */
+  display: block; /* Display as block to position it on a separate line */
+  text-align: right; /* Align the text to the right */
+  margin-top: 10px; /* Adjust this value as needed */
+}
+.mandatory-text{
+  font-size: smaller;
+}

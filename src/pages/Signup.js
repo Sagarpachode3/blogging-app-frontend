@@ -16,6 +16,7 @@ import Base from "../components/Base";
 import { signUp } from "../services/user-service";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import "../styles/Login.css";
 
 const Signup = () => {
   const [data, setData] = useState({
@@ -104,7 +105,7 @@ const Signup = () => {
                 <Form onSubmit={submitForm}>
                   {/* Name Field */}
                   <FormGroup>
-                    <Label for="name">Name</Label>
+                    <Label for="name">Name *</Label>
                     <Input
                       type="text"
                       placeholder="Enter name here"
@@ -121,7 +122,7 @@ const Signup = () => {
                   </FormGroup>
                   {/* Email Field */}
                   <FormGroup>
-                    <Label for="email">Email</Label>
+                    <Label for="email">Email *</Label>
                     <Input
                       type="email"
                       placeholder="Enter email here"
@@ -138,7 +139,7 @@ const Signup = () => {
                   </FormGroup>
                   {/* Password Field */}
                   <FormGroup>
-                    <Label for="password">Password</Label>
+                    <Label for="password">Password *</Label>
                     <Input
                       type="password"
                       placeholder="Enter password here"
@@ -155,7 +156,7 @@ const Signup = () => {
                   </FormGroup>
                   {/* About Field */}
                   <FormGroup>
-                    <Label for="about">About</Label>
+                    <Label for="about">About *</Label>
                     <Input
                       type="textarea"
                       placeholder="Write something about your self"
@@ -184,6 +185,10 @@ const Signup = () => {
                     </Button>
                   </Container>
                 </Form>
+                <p className="mandatory-text">* Marked fields are mandatory.</p>
+                <a href="/login" className="register-link">
+                  Already a user ? Login here !
+                </a>
               </CardBody>
             </Card>
           </Col>

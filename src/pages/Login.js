@@ -6,7 +6,6 @@ import {
   Col,
   Container,
   Form,
-  FormFeedback,
   FormGroup,
   Input,
   Label,
@@ -16,10 +15,14 @@ import Base from "../components/Base";
 import { useState } from "react";
 import { login } from "../services/user-service";
 import { toast } from "react-toastify";
+import { doLogin } from "../auth";
+import "../styles/Login.css";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [data, setData] = useState({
-    email: "",
+  const navigate = useNavigate();
+  const [loginDetails, setLoginDetails] = useState({
+    username: "",
     password: "",
   });
 
@@ -30,45 +33,52 @@ const Login = () => {
 
   const submitForm = (event) => {
     event.preventDefault();
-    console.log(data);
+    console.log(loginDetails);
 
-    login(data)
-      .then((resp) => {
-        console.log(resp);
-        console.log("Success Log");
-        toast.success("User Logged in SuccessFully");
-        setData({
-          name: "",
-          email: "",
-          password: "",
-          about: "",
+    //validation
+    if (
+      loginDetails.username.trim() == "" ||
+      loginDetails.password.trim() == ""
+    ) {
+      toast.error("Username and Password are mandatory !");
+      return;
+    }
+
+    //submit the data to server to generate token
+    login(loginDetails)
+      .then((data) => {
+        console.log(data);
+
+        //save the data to local storage
+
+        doLogin(data, () => {
+          console.log("Login detail is saved to local storage.");
+          //redirect to user dashboard page
+          //navigate("/user/dashboard");
         });
+        toast.success("User logged in !");
       })
       .catch((error) => {
         console.log(error);
-        console.log("Error Log");
-
-        //handle error in proper way
-        setError({
-          errors: error,
-          isError: true,
-        });
+        if (error.response.status == 400 || error.response.status == 404) {
+          //toast.error(error.response.data.message);
+          toast.error("Invalid username or password !");
+        } else {
+          toast.error("Something went wrong on server!");
+        }
       });
-  };
-
-  // Reset Data
-  const resetData = () => {
-    setData({
-      name: "",
-      email: "",
-      password: "",
-      about: "",
-    });
   };
 
   //handle change
   const handleChange = (event, property) => {
-    setData({ ...data, [property]: event.target.value });
+    setLoginDetails({ ...loginDetails, [property]: event.target.value });
+  };
+
+  const resetData = () => {
+    setLoginDetails({
+      username: "",
+      password: "",
+    });
   };
   return (
     <Base>
@@ -83,40 +93,29 @@ const Login = () => {
                 <Form onSubmit={submitForm}>
                   {/* Email Field */}
                   <FormGroup>
-                    <Label for="email">Email</Label>
+                    <Label for="email">Username *</Label>
                     <Input
                       type="email"
-                      placeholder="Enter email here"
+                      placeholder="Enter your email as username here"
                       id="email"
-                      onChange={(e) => handleChange(e, "email")}
-                      value={data.email}
-                      invalid={
-                        error.errors?.response?.data?.message ? true : false
-                      }
+                      onChange={(e) => handleChange(e, "username")}
+                      value={loginDetails.username}
                     />
-                    <FormFeedback>
-                      {error.errors?.response?.data?.message}
-                    </FormFeedback>
                   </FormGroup>
 
                   {/* Password Field */}
                   <FormGroup>
-                    <Label for="password">Password</Label>
+                    <Label for="password">Password *</Label>
                     <Input
                       type="password"
                       placeholder="Enter password here"
                       id="password"
                       onChange={(e) => handleChange(e, "password")}
-                      value={data.password}
-                      invalid={
-                        error.errors?.response?.data?.message ? true : false
-                      }
+                      value={loginDetails.password}
                     />
-                    <FormFeedback>
-                      {error.errors?.response?.data?.message}
-                    </FormFeedback>
                   </FormGroup>
-                  <Container>
+
+                  <Container className="text-center">
                     <Button color="primary">Login</Button>
                     <Button
                       className="ms-2"
@@ -128,6 +127,10 @@ const Login = () => {
                     </Button>
                   </Container>
                 </Form>
+                <p className="mandatory-text">* Marked fields are mandatory.</p>
+                <a href="/signup" className="register-link">
+                  New user ? Register here !
+                </a>
               </CardBody>
             </Card>
           </Col>
