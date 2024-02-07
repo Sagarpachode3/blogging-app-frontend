@@ -54,7 +54,7 @@ const Login = () => {
         doLogin(data, () => {
           console.log("Login detail is saved to local storage.");
           //redirect to user dashboard page
-          //navigate("/user/dashboard");
+          navigate("/user/dashboard");
         });
         toast.success("User logged in !");
       })
