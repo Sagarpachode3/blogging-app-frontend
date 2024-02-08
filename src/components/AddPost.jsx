@@ -12,14 +12,18 @@ import {
 } from "reactstrap";
 import { loadAllCategories } from "../services/category-service";
 import JoditEditor from "jodit-react";
+import { doCreatePost } from "../services/post-service";
+import { toast } from "react-toastify";
 
 const AddPost = () => {
   const editor = useRef(null);
-  const [content, setContent] = useState("");
+  //const [content, setContent] = useState("");
   const [categories, setCategories] = useState([]);
-  const config = {
-    placeholder: "Start typing ...",
-  };
+  const [post, setPost] = useState({ title: "", content: "", categoryId: "" });
+
+  // const config = {
+  //   placeholder: "Start typing ...",
+  // };
   useEffect(() => {
     loadAllCategories()
       .then((data) => {
@@ -31,24 +35,81 @@ const AddPost = () => {
       });
   }, []);
 
+  const fieldChanged = (event) => {
+    //console.log(event.target.name);
+    setPost({ ...post, [event.target.name]: event.target.value });
+  };
+
+  //fot getting content of JODIT Editor
+  const ContentFieldChanged = (data) => {
+    //console.log(event.target.name);
+    setPost({ ...post, content: data });
+  };
+
   const [error, setError] = useState({
     errors: {},
     isError: false,
   });
+
+  //create post function
+
+  const createPost = (event) => {
+    event.preventDefault();
+
+    if (post.title.trim() === "") {
+      toast.error("Post title cannot be empty !");
+      return;
+    }
+    if (post.content.trim() === "") {
+      toast.error("Post content cannot be empty !");
+      return;
+    }
+    if (post.categoryId.trim() === "") {
+      toast.error("Please select post category !");
+      return;
+    }
+    console.log("Form Submitted !");
+    console.log(post);
+
+    //submit the form on server
+
+    doCreatePost(post)
+      .then((data) => {
+        toast.error("post created");
+        console.log(post);
+      })
+      .catch((error) => {
+        toast.error("error");
+        console.log(error);
+      });
+  };
   return (
     <div className="wrapper">
       <Card className="mt-2 shadow">
         <CardHeader>
-          <h3>Express. Engage. Inspire. Start blogging now!</h3>
+          <h3
+            style={{
+              fontFamily: "cursive",
+              color: "#FFFFFF",
+              backgroundColor: "#3498db",
+              padding: "10px",
+            }}
+          >
+            Express. Engage. Inspire. Start blogging now!
+          </h3>
         </CardHeader>
+
         <CardBody>
-          <Form>
+          {/* {JSON.stringify(post)} */}
+          <Form onSubmit={createPost}>
             <FormGroup className="my-3">
               <Label for="title">Post title</Label>
               <Input
                 type="text"
                 id="title"
                 placeholder="Enter title of your post"
+                onChange={fieldChanged}
+                name="title"
               />
             </FormGroup>
             <FormGroup className="my-3">
@@ -61,9 +122,9 @@ const AddPost = () => {
               /> */}
               <JoditEditor
                 ref={editor}
-                value={content}
-                config={config}
-                onChange={(newContent) => setContent(newContent)}
+                value={post.content}
+                // config={config}
+                onChange={ContentFieldChanged}
               />
             </FormGroup>
             <FormGroup className="my-3">
@@ -71,8 +132,14 @@ const AddPost = () => {
               <Input
                 type="select"
                 id="category"
+                name="categoryId"
+                onChange={fieldChanged}
+                defaultValue={0}
                 //placeholder="Select category of your post"
               >
+                <option disabled value={0}>
+                  ---Select post category---
+                </option>
                 {/* <option disabled defaultValue={"Select category of your post"}></option> */}
                 {categories.map((category) => (
                   <option value={category.categoryId} key={category.categoryId}>
@@ -82,13 +149,14 @@ const AddPost = () => {
               </Input>
             </FormGroup>
             <Container className="text-end">
-              <Button color="primary">Create Post</Button>
+              <Button type="submit" color="primary">
+                Create Post
+              </Button>
               <Button className="ms-2" type="reset" color="danger">
                 Reset Content
               </Button>
             </Container>
           </Form>
-          {content}
         </CardBody>
       </Card>
     </div>
