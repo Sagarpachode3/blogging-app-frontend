@@ -14,17 +14,21 @@ import { loadAllCategories } from "../services/category-service";
 import JoditEditor from "jodit-react";
 import { doCreatePost } from "../services/post-service";
 import { toast } from "react-toastify";
+import { getCurrentUserDetail } from "../auth";
 
 const AddPost = () => {
   const editor = useRef(null);
   //const [content, setContent] = useState("");
   const [categories, setCategories] = useState([]);
+
+  const [user, setUser] = useState(undefined);
   const [post, setPost] = useState({ title: "", content: "", categoryId: "" });
 
   // const config = {
   //   placeholder: "Start typing ...",
   // };
   useEffect(() => {
+    setUser(getCurrentUserDetail());
     loadAllCategories()
       .then((data) => {
         console.log(data);
@@ -69,13 +73,14 @@ const AddPost = () => {
       return;
     }
     console.log("Form Submitted !");
-    console.log(post);
+    //console.log(post);
 
     //submit the form on server
+    post["userId"] = user.id;
 
     doCreatePost(post)
       .then((data) => {
-        toast.error("post created");
+        toast.success("post created");
         console.log(post);
       })
       .catch((error) => {
