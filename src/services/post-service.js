@@ -1,5 +1,13 @@
-import { myAxios } from "./helper";
+import { privateAxios } from "./helper";
+
+//create  post function
 export const doCreatePost = (postData) => {
-  return myAxios.post("", postData).then((response) => response.data);
+  //console.log(postData);
+  return privateAxios
+    .post(
+      `/user/${postData.userId}/category/${postData.categoryId}/posts`,
+      postData
+    )
+    .then((response) => response.data);
 };
 // @PostMapping("/user/{userId}/category/{categoryId}/posts")
