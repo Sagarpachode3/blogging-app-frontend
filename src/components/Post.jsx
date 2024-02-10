@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Button, Card, CardBody, CardText } from "reactstrap";
 
 function Post({
@@ -13,11 +14,14 @@ function Post({
         <h3>{post.title}</h3>
         <CardText
           dangerouslySetInnerHTML={{
-            __html: post.content.substring(0,200) + " ...",
+            __html: post.content.substring(0, 200) + " ...",
           }}
         ></CardText>
         <div>
-          <Button>Read More...</Button>
+          {/* <Button>Read More...</Button> */}
+          <Link className="btn btn-secondary" to={`/posts/` + post.postId}>
+            Read More...
+          </Link>
         </div>
       </CardBody>
     </Card>
