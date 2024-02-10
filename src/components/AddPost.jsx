@@ -79,7 +79,7 @@ const AddPost = () => {
     post["userId"] = user.id;
 
     doCreatePost(post)
-      .then((data) => {
+      .then((data) => 
         toast.success("Post Created");
         setPost({ title: "", content: "", categoryId: "" });
         //console.log(post);
@@ -87,6 +87,12 @@ const AddPost = () => {
       .catch((error) => {
         toast.error("error");
         //console.log(error);
+        toast.success("post created");
+        console.log(post);
+      })
+      .catch((error) => {
+        toast.error("error");
+        console.log(error);
       });
   };
   return (

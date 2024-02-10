@@ -1,4 +1,7 @@
+
 import { myAxios, privateAxios } from "./helper";
+
+import { privateAxios } from "./helper";
 
 //create  post function
 export const doCreatePost = (postData) => {
@@ -12,9 +15,11 @@ export const doCreatePost = (postData) => {
 };
 // @PostMapping("/user/{userId}/category/{categoryId}/posts")
 
+
 //get all Posts
 export const loadAllPosts = (pageNumber, pageSize) => {
   return myAxios
     .get(`/posts?pageNumber=${pageNumber}&pageSize=${pageSize}`)
     .then((response) => response.data);
 };
+
