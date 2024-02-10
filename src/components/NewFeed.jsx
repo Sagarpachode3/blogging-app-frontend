@@ -9,7 +9,6 @@ import {
   Row,
 } from "reactstrap";
 import Post from "./Post";
-import App from "../App.css";
 
 import { toast } from "react-toastify";
 
@@ -40,7 +39,7 @@ function NewFeed() {
     if (pageNumber > postContent.pageNumber && postContent.lastPage) {
       return;
     }
-    if (pageNumber < postContent.pageNumber && postContent.pageNumber == 0) {
+    if (pageNumber < postContent.pageNumber && postContent.pageNumber === 0) {
       return;
     }
     loadAllPosts(pageNumber, pageSize)
@@ -72,7 +71,7 @@ function NewFeed() {
             <Pagination size="lg">
               <PaginationItem
                 onClick={() => changePage(postContent.pageNumber - 1)}
-                disabled={postContent.pageNumber == 0}
+                disabled={postContent.pageNumber === 0}
               >
                 <PaginationLink previous>Previous</PaginationLink>
               </PaginationItem>
