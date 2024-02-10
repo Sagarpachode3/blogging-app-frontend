@@ -9,6 +9,7 @@ import {
   Row,
 } from "reactstrap";
 import Post from "./Post";
+import App from "../App.css";
 
 import { toast } from "react-toastify";
 
@@ -22,26 +23,35 @@ function NewFeed() {
     pageNumber: "",
   });
   useEffect(() => {
-    //load all posts from the server
-    loadAllPosts(0, 5)
-      .then((data) => {
-        console.log(data);
-        setPostContent(data);
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error("Error in loading post");
-      });
+    changePage(0);
+    //load all the posts from server
+    // loadAllPosts(0, 5)
+    //   .then((data) => {
+    //     console.log(data);
+    //     setPostContent(data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     toast.error("Error in loading posts.");
+    //   });
   }, []);
 
   const changePage = (pageNumber = 0, pageSize = 5) => {
+    if (pageNumber > postContent.pageNumber && postContent.lastPage) {
+      return;
+    }
+    if (pageNumber < postContent.pageNumber && postContent.pageNumber == 0) {
+      return;
+    }
     loadAllPosts(pageNumber, pageSize)
       .then((data) => {
+        //console.log(data);
         setPostContent(data);
         window.scroll(0, 0);
       })
       .catch((error) => {
-        toast.error("Error in loading post");
+        //console.log(error);
+        toast.error("Error in loading posts.");
       });
   };
 
@@ -60,19 +70,25 @@ function NewFeed() {
           ))}
           <Container className="text-center mt-3">
             <Pagination size="lg">
-              <PaginationItem disabled={postContent.pageNumber == 0}>
+              <PaginationItem
+                onClick={() => changePage(postContent.pageNumber - 1)}
+                disabled={postContent.pageNumber == 0}
+              >
                 <PaginationLink previous>Previous</PaginationLink>
               </PaginationItem>
               {[...Array(postContent.totalPages)].map((item, index) => (
                 <PaginationItem
                   onClick={() => changePage(index)}
-                  active={index == postContent.pageNumber}
+                  active={index === postContent.pageNumber}
                   key={index}
                 >
                   <PaginationLink>{index + 1}</PaginationLink>
                 </PaginationItem>
               ))}
-              <PaginationItem disabled={postContent.lastPage}>
+              <PaginationItem
+                onClick={() => changePage(postContent.pageNumber + 1)}
+                disabled={postContent.lastPage}
+              >
                 <PaginationLink next>Next</PaginationLink>
               </PaginationItem>
             </Pagination>
