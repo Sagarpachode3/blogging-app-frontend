@@ -8,18 +8,25 @@ function Post({
     content: "This is default post content.",
   },
 }) {
+  const printDate = (numbers) => {
+    return new Date(numbers).toLocaleString();
+  };
   return (
     <Card className="border-0 shadow-sm mt-3">
       <CardBody>
         <h3>{post.title}</h3>
         <CardText
           dangerouslySetInnerHTML={{
-            __html: post.content.substring(0, 200) + " ...",
+            __html: post.content.substring(0, 100) + " ...",
           }}
         ></CardText>
         <div>
-          {/* <Button>Read More...</Button> */}
-          <Link className="btn btn-secondary" to={`/posts/` + post.postId}>
+          <span className="text-muted">
+            posted by : {post?.user?.name} on {printDate(post?.addedDate)}
+          </span>
+        </div>
+        <div>
+          <Link className="btn btn-secondary mt-2" to={"/posts/" + post.postId}>
             Read More...
           </Link>
         </div>

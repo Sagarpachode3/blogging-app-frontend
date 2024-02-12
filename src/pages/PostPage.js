@@ -5,6 +5,7 @@ import { Card, CardBody, CardText, Col, Container, Row } from "reactstrap";
 import { Link } from "react-router-dom";
 import { loadPosts } from "../services/post-service";
 import { toast } from "react-toastify";
+import { BASE_URL } from "../services/helper";
 
 export const PostPage = () => {
   const { postId } = useParams();
@@ -16,7 +17,7 @@ export const PostPage = () => {
         console.log(data);
         setPost(data);
       })
-      .then((error) => {
+      .catch((error) => {
         console.log(error);
         toast.error("Couldn't Load post");
       });
@@ -28,20 +29,52 @@ export const PostPage = () => {
   return (
     <Base>
       <Container className="mt-4">
-        <Link to="/">Home</Link>
+        <Link to="/">Home</Link> / {post && <Link to="">{post.title}</Link>}
         <Row>
           <Col
             md={{
               size: 12,
             }}
           >
-            <Card className="mt-4">
-              <CardBody>
-                <CardText>
-                  Posted By : <b>{post?.user?.name}</b> on{" "}
-                  <b>{printDate(post?.addedDate)}</b>
-                </CardText>
-              </CardBody>
+            <Card className="mt-4 ps-2">
+              {post && (
+                <CardBody>
+                  <CardText>
+                    Posted By : <b>{post?.user?.name}</b> on{" "}
+                    <b>{printDate(post?.addedDate)}</b>
+                  </CardText>
+                  <CardText>
+                    <span className="text-muted">
+                      Posted in the category : {post?.category?.categoryTittle}
+                    </span>
+                  </CardText>
+                  <div
+                    className="divider"
+                    style={{
+                      width: "100%",
+                      height: "1px",
+                      background: "#e2e2e2",
+                    }}
+                  ></div>
+
+                  <h1 className="mt-3">{post?.title}</h1>
+
+                  <div
+                    className="image-container mt-4 shadow container text-center"
+                    style={{ maxWidth: "50%" }}
+                  >
+                    <img
+                      className="img-fluid"
+                      src={BASE_URL + "/post/image/" + post?.imageName}
+                      alt=""
+                    ></img>
+                  </div>
+                  <CardText
+                    className="mt-5"
+                    dangerouslySetInnerHTML={{ __html: post?.content }}
+                  ></CardText>
+                </CardBody>
+              )}
             </Card>
           </Col>
         </Row>
