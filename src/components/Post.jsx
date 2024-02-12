@@ -17,7 +17,8 @@ function Post({
         <h3>{post.title}</h3>
         <CardText
           dangerouslySetInnerHTML={{
-            __html: post.content.substring(0, 100) + " ...",
+
+            __html: post.content.substring(0, 150) + " ...",
           }}
         ></CardText>
         <div>
