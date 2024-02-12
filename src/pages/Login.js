@@ -26,10 +26,10 @@ const Login = () => {
     password: "",
   });
 
-  const [error, setError] = useState({
-    errors: {},
-    isError: false,
-  });
+  // const [error, setError] = useState({
+  //   errors: {},
+  //   isError: false,
+  // });
 
   const submitForm = (event) => {
     event.preventDefault();
@@ -37,8 +37,8 @@ const Login = () => {
 
     //validation
     if (
-      loginDetails.username.trim() == "" ||
-      loginDetails.password.trim() == ""
+      loginDetails.username.trim() === "" ||
+      loginDetails.password.trim() === ""
     ) {
       toast.error("Username and Password are mandatory !");
       return;
@@ -54,13 +54,13 @@ const Login = () => {
         doLogin(data, () => {
           console.log("Login detail is saved to local storage.");
           //redirect to user dashboard page
-          //navigate("/user/dashboard");
+          navigate("/user/dashboard");
         });
         toast.success("User logged in !");
       })
       .catch((error) => {
         console.log(error);
-        if (error.response.status == 400 || error.response.status == 404) {
+        if (error.response.status === 400 || error.response.status === 404) {
           //toast.error(error.response.data.message);
           toast.error("Invalid username or password !");
         } else {
