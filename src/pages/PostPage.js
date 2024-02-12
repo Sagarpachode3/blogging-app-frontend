@@ -16,13 +16,17 @@ import { createComment, loadPosts } from "../services/post-service";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../services/helper";
 import { isLoggedIn } from "../auth";
+import { Card, CardBody, CardText, Col, Container, Row } from "reactstrap";
+import { loadPosts } from "../services/post-service";
 
 export const PostPage = () => {
   const { postId } = useParams();
   const [post, setPost] = useState(null);
+
   const [comment, setComment] = useState({
     content: "",
   });
+
   useEffect(() => {
     //load post of postId
     loadPosts(postId)
@@ -39,6 +43,7 @@ export const PostPage = () => {
   const printDate = (numbers) => {
     return new Date(numbers).toLocaleString();
   };
+
 
   const submitComment = () => {
     if (!isLoggedIn()) {
@@ -62,6 +67,7 @@ export const PostPage = () => {
         console.log(error);
       });
   };
+
   return (
     <Base>
       <Container className="mt-4">
@@ -152,6 +158,7 @@ export const PostPage = () => {
             </Card>
           </Col>
         </Row>
+
       </Container>
     </Base>
   );
