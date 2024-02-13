@@ -118,7 +118,7 @@ export const PostPage = () => {
           <Col
             md={{
               size: 9,
-              offset: 1,
+              offset:1 ,
             }}
           >
             <h3>Comments ({post ? post.comments.length : ""})</h3>

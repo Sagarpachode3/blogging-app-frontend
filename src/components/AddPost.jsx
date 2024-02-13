@@ -86,12 +86,6 @@ const AddPost = () => {
       })
       .catch((error) => {
         toast.error("error");
-        //console.log(error);
-        toast.success("post created");
-        console.log(post);
-      })
-      .catch((error) => {
-        toast.error("error");
         console.log(error);
       });
   };
