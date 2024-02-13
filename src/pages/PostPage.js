@@ -16,8 +16,6 @@ import { createComment, loadPosts } from "../services/post-service";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../services/helper";
 import { isLoggedIn } from "../auth";
-import { Card, CardBody, CardText, Col, Container, Row } from "reactstrap";
-import { loadPosts } from "../services/post-service";
 
 export const PostPage = () => {
   const { postId } = useParams();
@@ -43,7 +41,6 @@ export const PostPage = () => {
   const printDate = (numbers) => {
     return new Date(numbers).toLocaleString();
   };
-
 
   const submitComment = () => {
     if (!isLoggedIn()) {
@@ -158,7 +155,6 @@ export const PostPage = () => {
             </Card>
           </Col>
         </Row>
-
       </Container>
     </Base>
   );

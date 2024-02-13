@@ -12,7 +12,7 @@ import {
 } from "reactstrap";
 import { loadAllCategories } from "../services/category-service";
 import JoditEditor from "jodit-react";
-import { doCreatePost } from "../services/post-service";
+import { doCreatePost, uploadPostImage } from "../services/post-service";
 import { toast } from "react-toastify";
 import { getCurrentUserDetail } from "../auth";
 
@@ -23,7 +23,7 @@ const AddPost = () => {
 
   const [user, setUser] = useState(undefined);
   const [post, setPost] = useState({ title: "", content: "", categoryId: "" });
-
+  const [image, setImage] = useState(null);
   // const config = {
   //   placeholder: "Start typing ...",
   // };
@@ -44,7 +44,7 @@ const AddPost = () => {
     setPost({ ...post, [event.target.name]: event.target.value });
   };
 
-  //fot getting content of JODIT Editor
+  //for getting content of JODIT Editor
   const ContentFieldChanged = (data) => {
     //console.log(event.target.name);
     setPost({ ...post, content: data });
@@ -72,6 +72,10 @@ const AddPost = () => {
       toast.error("Please select post category !");
       return;
     }
+    if (!validateImageType(image)) {
+      toast.error("Invalid image type. Allowed types are PNG, JPEG, or JPG.");
+      return;
+    }
     console.log("Form Submitted !");
     //console.log(post);
 
@@ -80,21 +84,35 @@ const AddPost = () => {
 
     doCreatePost(post)
       .then((data) => {
+        uploadPostImage(image, data.postId)
+          .then((data) => {
+            toast.success("Image Uploaded !!!");
+          })
+          .catch((error) => {
+            toast.error("Error in uploading image ");
+            console.log(error);
+          });
+
         toast.success("Post Created");
         setPost({ title: "", content: "", categoryId: "" });
         //console.log(post);
       })
       .catch((error) => {
         toast.error("error");
-        //console.log(error);
-        toast.success("post created");
-        console.log(post);
-      })
-      .catch((error) => {
-        toast.error("error");
         console.log(error);
       });
   };
+  //handling file change event
+  const handleFileChange = (event) => {
+    console.log(event.target.files[0]);
+    setImage(event.target.files[0]);
+  };
+
+  const validateImageType = (file) => {
+    const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
+    return allowedTypes.includes(file.type);
+  };
+
   return (
     <div className="wrapper">
       <Card className="mt-2 shadow">
@@ -139,6 +157,15 @@ const AddPost = () => {
                 onChange={ContentFieldChanged}
               />
             </FormGroup>
+            {/* file field */}
+            <div className="mt-3">
+              <Label for="image">Select post banner</Label>
+              <Input type="file" id="image" onChange={handleFileChange}></Input>
+            </div>
+            <div className="ms-2" style={{ color: "blue", fontSize: "small" }}>
+              *Allowed types are PNG, JPEG, or JPG
+            </div>
+
             <FormGroup className="my-3">
               <Label for="category">Category of Post</Label>
               <Input
