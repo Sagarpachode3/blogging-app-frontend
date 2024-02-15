@@ -2,7 +2,14 @@ body {
   background: #cfd8dc !important;
 }
 .active > .page-link,
-.page-link.active  {
+.page-link.active {
   background-color: #121212 !important;
   border-color: #121212 !important;
+}
+
+.modal-center {
+  position: fixed;
+  top: 50%;
+  left: 0%;
+  transform: translate(-50%, -50%);
 }

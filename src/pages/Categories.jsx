@@ -4,7 +4,10 @@ import { useParams } from "react-router";
 import { Col, Container, Row } from "reactstrap";
 import NewFeed from "../components/NewFeed";
 import CategorySideMenu from "../components/CategorySideMenu";
-import { loadPostCategoryWise } from "../services/post-service";
+import {
+  loadPostCategoryWise,
+  deletePostService,
+} from "../services/post-service";
 import { toast } from "react-toastify";
 import Post from "../components/Post";
 
@@ -25,6 +28,24 @@ function Categories() {
       });
   }, [categoryId]);
 
+  function deletePost(post) {
+    //going to delete post
+    console.log(post);
+    if (window.confirm("Are you sure you want to delete this post?")) {
+      deletePostService(post.postId)
+        .then((res) => {
+          console.log(res);
+          toast.success("Post Deleted Sucessfully");
+          let newPosts = posts.filter((p) => p.postId != post.postId);
+          setPosts([...newPosts]);
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error("error in deleting post");
+        });
+    }
+  }
+
   return (
     <Base>
       <Container className="mt-3">
@@ -37,7 +58,7 @@ function Categories() {
 
             {posts &&
               posts.map((post, index) => {
-                return <Post key={index} post={post} />;
+                return <Post key={index} deletePost={deletePost} post={post} />;
               })}
 
             {posts.length <= 0 ? <h1>No posts in this category</h1> : ""}

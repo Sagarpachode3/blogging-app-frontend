@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Card, CardBody, CardText } from "reactstrap";
 import { getCurrentUserDetail, isLoggedIn } from "../auth";
+import userContext from "../context/userContext";
 
 function Post({
   post = {
@@ -14,12 +15,13 @@ function Post({
   const printDate = (numbers) => {
     return new Date(numbers).toLocaleString();
   };
+  const userContextData = useContext(userContext);
   const [user, setUser] = useState(null);
   const [login, setLogin] = useState(null);
 
   useEffect(() => {
     setUser(getCurrentUserDetail());
-    setLogin(isLoggedIn);
+    setLogin(isLoggedIn());
   }, []);
   return (
     <Card className="border-0 shadow-sm mt-3">
@@ -42,9 +44,13 @@ function Post({
           >
             Read More...
           </Link>
-          {isLoggedIn &&
+          {userContextData.user.login &&
             (user && user.id === post.user.id ? (
-              <Button className="ms-2 mt-1" color="danger" onClick={()=>deletePost(post)}>
+              <Button
+                onClick={() => deletePost(post)}
+                className="ms-2 mt-1"
+                color="danger"
+              >
                 Delete
               </Button>
             ) : (

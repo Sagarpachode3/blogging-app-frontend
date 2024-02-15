@@ -7,7 +7,7 @@ const Services = () => {
       {(user) => (
         <Base>
           <h1>This is Services Page</h1>
-          <h1>Welcome {user.name}</h1>
+          <h1>Welcome {user.user.data.user.name}</h1>
         </Base>
       )}
     </userContext.Consumer>

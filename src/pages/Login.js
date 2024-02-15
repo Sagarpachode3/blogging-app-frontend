@@ -12,14 +12,17 @@ import {
   Row,
 } from "reactstrap";
 import Base from "../components/Base";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { login } from "../services/user-service";
 import { toast } from "react-toastify";
 import { doLogin } from "../auth";
 import "../styles/Login.css";
 import { useNavigate } from "react-router-dom";
+import userContext from "../context/userContext";
 
 const Login = () => {
+  const userContextData = useContext(userContext);
+
   const navigate = useNavigate();
   const [loginDetails, setLoginDetails] = useState({
     username: "",
@@ -54,6 +57,11 @@ const Login = () => {
         doLogin(data, () => {
           console.log("Login detail is saved to local storage.");
           //redirect to user dashboard page
+
+          userContextData.setUser({
+            data: data,
+            login: true,
+          });
           navigate("/user/dashboard");
         });
         toast.success("User logged in !");
