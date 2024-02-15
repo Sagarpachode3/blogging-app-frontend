@@ -4,10 +4,10 @@ import userContext from "../context/userContext";
 const Services = () => {
   return (
     <userContext.Consumer>
-      {(user) => (
+      {(object) => (
         <Base>
           <h1>This is Services Page</h1>
-          <h1>Welcome {user.user.data.user.name}</h1>
+          <h1>Welcome {object.user.login && object.user.data.name}</h1>
         </Base>
       )}
     </userContext.Consumer>

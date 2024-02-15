@@ -9,7 +9,8 @@ const About = () => {
           <h1>This is about Page.</h1>
           <p>We are building blog website</p>
           <h1>
-            Welcome user: {object.user.login && object.user.data.user.name}
+            {console.log(object)}
+            Welcome user: {object.user.login && object.user.data.name}
           </h1>
         </Base>
       )}

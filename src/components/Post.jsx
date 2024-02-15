@@ -56,6 +56,19 @@ function Post({
             ) : (
               ""
             ))}
+          {userContextData.user.login &&
+            (user && user.id === post.user.id ? (
+              <Button
+                tag={Link}
+                to={`/user/update-blog/${post.postId}`}
+                className="ms-2 mt-1"
+                color="warning"
+              >
+                Update
+              </Button>
+            ) : (
+              ""
+            ))}
         </div>
       </CardBody>
     </Card>
