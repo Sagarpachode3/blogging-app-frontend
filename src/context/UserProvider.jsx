@@ -4,14 +4,11 @@ import userContext from "./userContext";
 function UserProvider({ children }) {
   // Destructure children from props
   const [user, setUser] = useState({
-    name: "Sagar",
+    data: {},
+    login: false,
   });
-  useEffect(() => {
-    setUser({
-      name: "Rakesh Patil",
-    });
-  }, []);
-  return <userContext.Provider value={user}>{children}</userContext.Provider>;
+
+  return <userContext.Provider value={{user,setUser}}>{children}</userContext.Provider>;
 }
 
 export default UserProvider;
