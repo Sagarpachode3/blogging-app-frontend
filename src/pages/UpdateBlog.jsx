@@ -16,8 +16,7 @@ import {
   Label,
 } from "reactstrap";
 import JoditEditor from "jodit-react";
-import { doCreatePost, uploadPostImage } from "../services/post-service";
-import { getCurrentUserDetail } from "../auth";
+
 import { loadAllCategories } from "../services/category-service";
 
 function UpdateBlog() {
@@ -29,7 +28,17 @@ function UpdateBlog() {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    //load thr blog from database
+    //setUser(getCurrentUserDetail());
+    loadAllCategories()
+      .then((data) => {
+        console.log(data);
+        setCategories(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    //load the blog from database
 
     loadPosts(blogId)
       .then((data) => {
@@ -42,18 +51,8 @@ function UpdateBlog() {
   }, []);
 
   useEffect(() => {
-    //setUser(getCurrentUserDetail());
-    loadAllCategories()
-      .then((data) => {
-        console.log(data);
-        setCategories(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-
-  useEffect(() => {
+    //console.log(post);
+    //console.log(object);
     if (post) {
       if (post.user.id != object.user.data.id) {
         toast.error("This is not your post");
