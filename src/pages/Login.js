@@ -59,7 +59,7 @@ const Login = () => {
           //redirect to user dashboard page
 
           userContextData.setUser({
-            data: data,
+            data: data.user,
             login: true,
           });
           navigate("/user/dashboard");
